@@ -5,7 +5,6 @@
 Using CNN to predict the object masks and depths from a single image
 
 
-Camera Surveillance
 Team members:
 
 - Deeksha Pandit- dp35222
@@ -14,7 +13,7 @@ Team members:
 - Shivangi Dubey- scd2422
 - ViswaTej Seela- VS26276
 
-##Problem and Motivation
+## Problem and Motivation
 
 Camera surveillance is an essential application of computer vision in which the goal is to monitor and detect activities in a given scene. A common challenge in camera surveillance is to separate the foreground (i.e., the moving objects) from the background (i.e., the stationary objects) and estimate the depth of the objects in the scene.
 
@@ -28,11 +27,11 @@ Data Source
 Our model is supposed to take two images, background (bg) and fg_bg, as inputs at once. The output should be the mask, which is the segmented humans in the fg_bg, and the depth map of the fg_bg. The images are of dimension 224x224, both for inputs and outputs.
 
 
-##Augmentations:
+## Augmentations:
 
 We started by using the resize function on the 64x64 sized images. Then we changed the function to resize the images to 224x224, as we wanted to experiment with smaller resolution images before moving on to larger ones (transfer learning). Additionally, we added the ColorJitter() function for data augmentation. We normalized the images using the mean and standard deviation of Fg-Bg images that we had calculated and then converted the images to tensors using the ToTensor() function.
 
-##Model
+## Model
 First, ResNet18 architecture was used and the average pooling and FC layer were removed. Padding was set to 1 to maintain the same input and output size, but this led to a memory issue due to the large amount of memory needed for processing. It was then realized that not only parameter count but also memory storage and forward/backward pass memory were important considerations.
 
 So after trying various models available, we chose to work with the UNet model.
@@ -48,7 +47,7 @@ First, we have some common layers for both depth and mask images. Then we split 
 
 Finally, the model would return logits_mask if we are running the model for mask images or it would return logits_depth if we are running the model for depth images.
 
-##Loss Functions:
+## Loss Functions:
 
 MSELoss() — Did not give good results
 
@@ -56,7 +55,7 @@ BCEWithLogitsLoss() — This worked best for mask images and this is the loss fu
 
 L1Loss() — Then we realized we had to use different loss functions for both depth and mask images and planned to go with L1Loss() for depth images and this worked well
 
-##Results
+## Results
 
 Intersection over Union (IOU)
 
@@ -73,7 +72,7 @@ RMSE can be used to compare the performance of different depth prediction models
 IoU Results: Average Metric = 0.8109732806682587
 RMSE Results: Average Metric = 0.6715668320655823
 
-##Conclusion
+## Conclusion
 
 However, it is important to note that monocular mask and depth estimation models have some limitations, such as their inability to handle transparent or reflective objects, and their potential failure in highly textured or repetitive scenes. Additionally, these models may not generalize well to new scenes or objects, as they are trained on a specific dataset.
 
